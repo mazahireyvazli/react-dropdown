@@ -13,3 +13,8 @@ Run the commands below:
 - Run: `yarn`
 - Run: `yarn dev`
 - Visit: http://localhost:5173/
+
+## Using docker compose
+
+- Run: `docker compose up`
+- Visit: http://localhost:4173/
