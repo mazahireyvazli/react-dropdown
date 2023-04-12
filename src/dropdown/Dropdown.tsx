@@ -1,7 +1,8 @@
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowDown } from "./Icons";
+import classNames from "classnames";
 import { useOutsideClickHandler } from "./utils";
-import "./dropdown.css";
+import { ArrowDown } from "./icons/ArrowDown";
+import "./dropdown.scss";
 
 type DropdownOption<ValueType, LabelType> = {
   value: ValueType;
@@ -24,7 +25,7 @@ export const Dropdown = <
   options,
   onSelect,
 }: DropdownProps<ValueType, LabelType>) => {
-  const [showList, setShowList] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const selectedOption = useMemo(() => {
     return options.find((option) => option.value === value);
@@ -32,30 +33,39 @@ export const Dropdown = <
 
   const selectedOptionRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    selectedOptionRef.current?.scrollIntoView(); // scroll to selected option in the dropdown
-  }, [showList]);
+    selectedOptionRef.current?.scrollIntoView(false); // scroll to selected option in the dropdown
+  }, [isOpen]);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   useOutsideClickHandler(wrapperRef, () => {
-    setShowList(false); // hide dropdown list when clicked outside
+    setIsOpen(false); // hide dropdown list when clicked outside
   });
 
   return (
-    <div ref={wrapperRef} className={`dropdown ${showList ? "is-open" : ""}`}>
+    <div
+      ref={wrapperRef}
+      className={classNames("dropdown", {
+        "is-open": isOpen,
+      })}
+    >
       <div
         className="dropdown-display"
         onClick={() => {
-          setShowList((current) => !current);
+          setIsOpen((current) => !current);
         }}
       >
-        <div className={`display-value ${selectedOption ? "" : "no-value"}`}>
+        <div
+          className={classNames("display-value", {
+            "no-value": !selectedOption,
+          })}
+        >
           {selectedOption ? selectedOption.label : placeholder}
         </div>
         <div className="arrow">
           <ArrowDown />
         </div>
       </div>
-      {showList && (
+      {isOpen && (
         <div className="dropdown-list-wrapper">
           <div className="dropdown-list">
             {options.map((option) => (
@@ -63,16 +73,16 @@ export const Dropdown = <
                 key={option.value}
                 onClick={() => {
                   onSelect(option);
-                  setShowList(false);
+                  setIsOpen(false);
                 }}
                 ref={(node) => {
                   if (selectedOption?.value === option.value) {
                     selectedOptionRef.current = node;
                   }
                 }}
-                className={`dropdown-option ${
-                  selectedOption?.value === option.value ? "selected" : ""
-                }`}
+                className={classNames("dropdown-option", {
+                  selected: selectedOption?.value === option.value,
+                })}
               >
                 {option.label}
               </div>
