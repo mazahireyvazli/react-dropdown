@@ -31,13 +31,7 @@ function App() {
           setSelectedOption(option.value);
         }}
       />
-      <div
-        style={{
-          marginTop: "35px",
-          display: "grid",
-          gap: "1rem",
-        }}
-      >
+      <div className="actions">
         <button onClick={() => setSelectedOption("")}>Reset value</button>
         <button onClick={() => setPlaceholder("Random placeholder")}>
           Update placeholder
