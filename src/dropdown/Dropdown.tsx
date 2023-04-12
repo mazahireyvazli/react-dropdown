@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import classNames from "classnames";
 import { useOutsideClickHandler } from "./utils";
 import { ArrowDown } from "./icons/ArrowDown";
-import "./dropdown.scss";
+import styles from "./dropdown.module.scss";
 
 type DropdownOption<ValueType, LabelType> = {
   value: ValueType;
@@ -44,30 +44,30 @@ export const Dropdown = <
   return (
     <div
       ref={wrapperRef}
-      className={classNames("dropdown", {
-        "is-open": isOpen,
+      className={classNames(styles.dropdown, {
+        [styles.isOpen]: isOpen,
       })}
     >
       <div
-        className="dropdown-display"
+        className={styles.display}
         onClick={() => {
           setIsOpen((current) => !current);
         }}
       >
         <div
-          className={classNames("display-value", {
-            "no-value": !selectedOption,
+          className={classNames(styles.displayValue, {
+            [styles.noValue]: !selectedOption,
           })}
         >
           {selectedOption ? selectedOption.label : placeholder}
         </div>
-        <div className="arrow">
+        <div className={styles.arrow}>
           <ArrowDown />
         </div>
       </div>
       {isOpen && (
-        <div className="dropdown-list-wrapper">
-          <div className="dropdown-list">
+        <div className={styles.listWrapper}>
+          <div className={styles.list}>
             {options.map((option) => (
               <div
                 key={option.value}
@@ -80,8 +80,8 @@ export const Dropdown = <
                     selectedOptionRef.current = node;
                   }
                 }}
-                className={classNames("dropdown-option", {
-                  selected: selectedOption?.value === option.value,
+                className={classNames(styles.option, {
+                  [styles.selected]: selectedOption?.value === option.value,
                 })}
               >
                 {option.label}
